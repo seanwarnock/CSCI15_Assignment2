@@ -25,37 +25,71 @@ Also, remember and print the longest and shortest words in the file.  If there i
 
 using namespace std;
 
-int main()
+int main(int argc, char* argv[])
 {
-    string stringInFileName = "test.txt";
+    const char StringTokens[] = " ,.";
+    const int MaxWords = 100;
+
     ifstream inFile;
-    string stringOutFileName = "testout.txt";
     ofstream outFile;
-    char LineString[100];
+    char LineString[MaxWords];
+    char ArrayHold [MaxWords][16];
+    int ArrayCount [MaxWords];
+    int bigstring = 0;
+    int smallstring = 0;
+    int totalwords = 0;
+    //uniquewords = This will be count the elements in arrayhold after program run.
+    int LineNumber = 0;
+
+    char *WordHolder;
 
 
+//Setup the console.
     SetConsoleTitle(ASSIGNMENT);
     system("cls");
 
-     cout << "Please enter a file name in the local path to open. : ";
-    //cin >> stringInFileName;
-    cout << endl;
-    cout << "Please enter a file name in the local path to write. : ";
-    //cin >> stringOutFileName;
-    cout << endl;
-
-    inFile.open(stringInFileName);
-    outFile.open(stringOutFileName);
-
-    while (!inFile.eof())
+//Confirm if the correct number of arguments are received.  This does not verify if the arguments are "OK".
+    if (argc < 3)
     {
-        inFile.getline(LineString,100,'\n');
-        strtok(LineString, ' ');
-//need to test for "last line"
-        cout << LineString << endl;
-        outFile << LineString << endl;
+        cout << "Please enter the <SOURCE> file and the <DESTINATION> file.";
+        exit(90);
     }
 
+    cout << "you entered " << argc << " arguments " << argv[1] << " " << argv[2];
+
+    inFile.open(argv[1]);
+    outFile.open(argv[2]);
+
+    inFile.getline(LineString,MaxWords,'\n');
+
+    cout << LineString;
+    outFile << LineString;
+    //need to parse this first string here
+//        strtok(LineString, ' ');
+    while (!inFile.eof())
+    {
+        cout << endl;
+        outFile << endl;
+        LineNumber++;
+
+        inFile.getline(LineString,MaxWords,'\n');
+        cout << LineString;
+        outFile << LineString;
+
+/*
+        WordHolder = strtok(LineString, StringTokens);
+        while (LineString != NULL)
+        {
+            WordHolder = strtok(NULL, StringTokens);
+        }
+        //need to part this first string here
+        //        strtok(LineString, ' ');
+        //Big and small is compated to the biggest item in the array and smallest item of the array.  Only update this value if it is bigger or smaller.
+*/
+    }
+
+    cout << endl << "Total lines : " << LineNumber << endl;
     inFile.close();
     outFile.close();
+
 }
