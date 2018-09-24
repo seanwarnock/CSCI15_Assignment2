@@ -100,8 +100,6 @@ int main(int argc, char* argv[])
         exit(90);
     }
 
-
-
 //Open each of the files
     inFile.open(argv[1]);
     outFile.open(argv[2]);
@@ -129,8 +127,8 @@ int main(int argc, char* argv[])
 
     }
 
-    cout << "Source file: " << argv[1] << " Out file: " << argv[2] << endl;
-    outFile << "Source file: " << argv[1] << " Out file: " << argv[2] << endl;
+    cout << endl << "Source file: " << argv[1] << " Out file: " << argv[2] << endl;
+    outFile << endl << "Source file: " << argv[1] << " Out file: " << argv[2] << endl;
     cout << endl << setw(16) << "Total lines : " << LineNumber << endl;
     outFile << endl << setw(16) << "Total lines : " << LineNumber << endl;
     cout << setw(16) << "Word" << setw(10) << "Times" << endl;
@@ -166,5 +164,4 @@ int main(int argc, char* argv[])
     outFile << "The smallest word was : " << smallstring << endl;
     inFile.close();
     outFile.close();
-
 }
