@@ -25,24 +25,68 @@ Also, remember and print the longest and shortest words in the file.  If there i
 
 using namespace std;
 
+const char StringTokens[] = " ,.";
+const int MaxWords = 100;
+
+struct WordItem
+   {
+    char FoundWord[16] = "";
+    int TimesUsed = 0;
+  };
+
+void LineParser(char LineToParse[], WordItem ArrayToHold[])
+{
+    char *WordHolder;
+    int counter;
+    bool FountIt;
+
+    WordHolder = strtok(LineToParse, StringTokens);
+
+    while (WordHolder != NULL)
+    {
+        //cout << endl << "chk:" << WordHolder;
+        counter = 0;
+        FountIt = false;
+
+        while ((counter < MaxWords) && (FountIt == false))
+        {
+            //cout << "Check " << counter << endl;
+            if (strcmp (ArrayToHold[counter].FoundWord, "") == 0)
+            {
+                strcpy(ArrayToHold[counter].FoundWord, WordHolder);
+                ArrayToHold[counter].TimesUsed++;
+                FountIt = true;
+          //      cout <<  "Array:" << ArrayToHold[counter].FoundWord;
+            //    cout << "Adding:" << WordHolder << endl;
+            }
+            else if (strcmp (ArrayToHold[counter].FoundWord, WordHolder) == 0)
+            {
+                ArrayToHold[counter].TimesUsed++;
+                FountIt = true;
+              //  cout << "Updating:" << WordHolder << endl;
+            }
+            else
+            {
+                counter++;
+                //cout << "inc:" << counter;
+            }
+        }
+
+        WordHolder = strtok(NULL, StringTokens);
+    }
+}
+
 int main(int argc, char* argv[])
 {
-    const char StringTokens[] = " ,.";
-    const int MaxWords = 100;
-
     ifstream inFile;
     ofstream outFile;
     char LineString[MaxWords];
-    char ArrayHold [MaxWords][16];
-    int ArrayCount [MaxWords];
+    WordItem ArrayHold [MaxWords];
     int bigstring = 0;
     int smallstring = 0;
     int totalwords = 0;
     //uniquewords = This will be count the elements in arrayhold after program run.
     int LineNumber = 0;
-
-    char *WordHolder;
-
 
 //Setup the console.
     SetConsoleTitle(ASSIGNMENT);
@@ -55,17 +99,22 @@ int main(int argc, char* argv[])
         exit(90);
     }
 
-    cout << "you entered " << argc << " arguments " << argv[1] << " " << argv[2];
+    cout << "you entered " << argc << " arguments " << argv[1] << " " << argv[2] << endl;
 
+//Open each of the files
     inFile.open(argv[1]);
     outFile.open(argv[2]);
 
+//Pull the first line of the file to read.
     inFile.getline(LineString,MaxWords,'\n');
-
     cout << LineString;
     outFile << LineString;
-    //need to parse this first string here
-//        strtok(LineString, ' ');
+    LineNumber++;
+    LineParser(LineString, ArrayHold);
+
+//Now that we have the first line start looping through the remainder of the file or stop if
+//the file is empty.  This deals with the last line of the file and NOT putting
+//and extra newline.
     while (!inFile.eof())
     {
         cout << endl;
@@ -75,20 +124,18 @@ int main(int argc, char* argv[])
         inFile.getline(LineString,MaxWords,'\n');
         cout << LineString;
         outFile << LineString;
+        LineParser(LineString, ArrayHold);
 
-/*
-        WordHolder = strtok(LineString, StringTokens);
-        while (LineString != NULL)
-        {
-            WordHolder = strtok(NULL, StringTokens);
-        }
-        //need to part this first string here
-        //        strtok(LineString, ' ');
-        //Big and small is compated to the biggest item in the array and smallest item of the array.  Only update this value if it is bigger or smaller.
-*/
     }
 
     cout << endl << "Total lines : " << LineNumber << endl;
+
+    cout << "Word" << "Times" << endl;
+    for (int i=0;i<100;i++)
+    {
+        cout << ArrayHold[i].FoundWord << ArrayHold[i].TimesUsed << endl;
+    }
+
     inFile.close();
     outFile.close();
 
