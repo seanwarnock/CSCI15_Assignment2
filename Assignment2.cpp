@@ -11,7 +11,7 @@ Also, remember and print the longest and shortest words in the file.  If there i
 */
 #include <iostream>
 #include <cstring>
-//#include <iomanip>
+#include <iomanip>
 #include <fstream>
 //#include <math.h>
 #ifdef _WIN32
@@ -25,7 +25,7 @@ Also, remember and print the longest and shortest words in the file.  If there i
 
 using namespace std;
 
-const char StringTokens[] = " ,.";
+const char StringTokens[] = " .";
 const int MaxWords = 100;
 
 struct WordItem
@@ -82,11 +82,12 @@ int main(int argc, char* argv[])
     ofstream outFile;
     char LineString[MaxWords];
     WordItem ArrayHold [MaxWords];
-    int bigstring = 0;
-    int smallstring = 0;
+    char bigstring[16] = "";
+    char smallstring[16] = "";
     int totalwords = 0;
     //uniquewords = This will be count the elements in arrayhold after program run.
     int LineNumber = 0;
+    int i;
 
 //Setup the console.
     SetConsoleTitle(ASSIGNMENT);
@@ -99,7 +100,7 @@ int main(int argc, char* argv[])
         exit(90);
     }
 
-    cout << "you entered " << argc << " arguments " << argv[1] << " " << argv[2] << endl;
+
 
 //Open each of the files
     inFile.open(argv[1]);
@@ -128,14 +129,41 @@ int main(int argc, char* argv[])
 
     }
 
-    cout << endl << "Total lines : " << LineNumber << endl;
+    cout << "Source file: " << argv[1] << " Out file: " << argv[2] << endl;
+    outFile << "Source file: " << argv[1] << " Out file: " << argv[2] << endl;
+    cout << endl << setw(16) << "Total lines : " << LineNumber << endl;
+    outFile << endl << setw(16) << "Total lines : " << LineNumber << endl;
+    cout << setw(16) << "Word" << setw(10) << "Times" << endl;
+    outFile << setw(16) << "Word" << setw(10) << "Times" << endl;
 
-    cout << "Word" << "Times" << endl;
-    for (int i=0;i<100;i++)
+    i = 0;
+    strcpy(bigstring,ArrayHold[i].FoundWord);
+    strcpy(smallstring,ArrayHold[i].FoundWord);
+
+    while ((strcmp (ArrayHold[i].FoundWord, "") != 0) && (i < MaxWords))
     {
-        cout << ArrayHold[i].FoundWord << ArrayHold[i].TimesUsed << endl;
+        totalwords = totalwords + ArrayHold[i].TimesUsed;
+        cout << setw(16) << ArrayHold[i].FoundWord << setw(10) << ArrayHold[i].TimesUsed << endl;
+        outFile << setw(16) << ArrayHold[i].FoundWord << setw(10) << ArrayHold[i].TimesUsed << endl;
+        if (strlen(bigstring) < strlen(ArrayHold[i].FoundWord))
+            {
+                strcpy(bigstring,ArrayHold[i].FoundWord);
+            }
+        else if (strlen(smallstring) > strlen(ArrayHold[i].FoundWord))
+            {
+                strcpy(smallstring,ArrayHold[i].FoundWord);
+            }
+        i++;
     }
 
+    cout << "Unique Words : " << i << endl;
+    outFile << "Unique Words : " << i << endl;
+    cout << "Total Words : "  << totalwords << endl;
+    outFile << "Total Words : "  << totalwords << endl;
+    cout << "The largest word was :" << bigstring << endl;
+    outFile << "The largest word was :" << bigstring << endl;
+    cout << "The smallest word was : " << smallstring << endl;
+    outFile << "The smallest word was : " << smallstring << endl;
     inFile.close();
     outFile.close();
 
